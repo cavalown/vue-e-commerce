@@ -34,16 +34,20 @@ export default {
   },
   methods: {
     signIn() {
-      const api = `${import.meta.env.VITE_API_SERVER
-        }${import.meta.env.VITE_API_PATH}admin/signin`
+      const api = `${import.meta.env.VITE_API_SERVER}admin/signin`
       this.$http.post(`${api}`, this.user)
         .then(res => {
-          console.log('res:', res);
+          if (res.data.success) {
+            // console.log('res:', res);
+            const { token, expired } = res.data;
+            document.cookie = `hexToken=${token};expires=${new Date(expired)}`;
+            this.$router.push('/dashboard');
+          }
         })
         .catch(error => {
           console.log(error)
         })
     }
-  },
+  }
 }
 </script>
