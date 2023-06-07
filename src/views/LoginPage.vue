@@ -10,8 +10,8 @@
         </div>
         <div class="mb-2">
           <label for="inputPassword" class="sr-only">Password</label>
-          <input v-model="user.password" type="password" id="inputPassword" class="form-control" placeholder="Password"
-            required />
+          <input v-on:keyup.enter="signIn" v-model="user.password" type="password" id="inputPassword" class="form-control"
+            placeholder="Password" required />
         </div>
         <div class="text-end mt-4">
           <button class="btn btn-lg btn-primary btn-block" type="submit">登入</button>
@@ -35,13 +35,13 @@ export default {
   methods: {
     signIn() {
       const api = `${import.meta.env.VITE_API_SERVER}admin/signin`
-      this.$http.post(`${api}`, this.user)
+      this.$http.post(api, this.user)
         .then(res => {
           if (res.data.success) {
             // console.log('res:', res);
             const { token, expired } = res.data;
             document.cookie = `hexToken=${token};expires=${new Date(expired)}`;
-            this.$router.push('/dashboard');
+            this.$router.push('/dashboard/products');
           }
         })
         .catch(error => {
